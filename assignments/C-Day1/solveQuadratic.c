@@ -22,10 +22,22 @@ int main(int argc, char **argv) {
   float a = atof(argv[1]);
   float b = atof(argv[2]);
   float c = atof(argv[3]);
-
-  float x1 = 0, x2 = 0;
-
-  printf("%.8f, %.8f\n", x1, x2);    
+  
+  if (a==0) {
+    float x1 = -c/b;
+    printf("%.8f\n",x1);
+  } else if (b*b-4*a*c>0) {
+    double tmp = sqrt(b*b-4.0*a*c)/(2*a);
+    float x1 = -b/(2*a) - tmp, x2 = -b/(2*a) + tmp;
+    printf("%.8f, %.8f\n", x1, x2);
+  } else if (b*b-4*a*c==0) {
+    float x1 = -b/(2*a);
+    printf("%.8f\n",x1);
+  } else {
+    float x1 = -b/(2*a);
+    double im1 = sqrt(-b*b+4.0*a*c)/(2*a);
+    printf("%.8f + %.8fi, %.8f - %.8fi\n",x1,im1,x1,im1);
+  }
   
   return 0;
 }
