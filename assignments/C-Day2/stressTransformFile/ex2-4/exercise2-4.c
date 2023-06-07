@@ -26,15 +26,16 @@ int main(int argc, char **argv) {
 
 	FILE *f_ptr;
 
-	f_ptr = ...
+	f_ptr = fopen("mohrcircle.dta","wb");
 
 	// define a data structure for a single entry in the file
 
-	struct RESULT {
-		...
-		...
-	} result;
+	typedef struct {
+	  double theta;
+	  STRESS S;
+	} RESULT;
 
+	RESULT *theVector = (RESULT *)malloc((int)(180./dth+1)*sizeof(RESULT));
 	// set the initial stress state
 
 	STRESS S0;
@@ -48,17 +49,18 @@ int main(int argc, char **argv) {
 	STRESS Sp;
 
 	// loop to compute transformed states
-
-	for (double th=0.0; th <= 180.; th+=dth) {
+	int i; double th;
+	for (i=0,th=0.0; th <= 180.; th+=dth,i++) {
 
 	    StressTransform(S0, &Sp, th);
-
-	    // THIS PRINT STATEMENT NEEDS TO BE REPLACED BY WRITING TO THE FILE
-	    printf("%12.6f, %12.6f, %12.6f, %12.6f\n", th, Sp.sigx, Sp.sigy, Sp.tau);
-
+	    RESULT result;
+	    result.theta=th;
+	    result.S=Sp;
+	    theVector[i]=result;
 	}
 
 	// done writing data -- close the file
-	...
+	fwrite(theVector,sizeof(RESULT),(int)(180./dth+1),f_ptr);
+	fclose(f_ptr);
 }
 
